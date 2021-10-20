@@ -55,7 +55,7 @@ class DatabaseLauncher(
       return
     }
 
-    database.updateDao().markUpdateAccessed(launchedUpdate)
+    database.updateDao().markUpdateAccessed(launchedUpdate!!)
 
     if (launchedUpdate!!.status == UpdateStatus.EMBEDDED) {
       bundleAssetName = EmbeddedLoader.Companion.BARE_BUNDLE_FILENAME

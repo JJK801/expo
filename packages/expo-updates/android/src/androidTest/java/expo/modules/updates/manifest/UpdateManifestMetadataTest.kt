@@ -19,9 +19,9 @@ import java.util.*
 
 @RunWith(AndroidJUnit4ClassRunner::class)
 class UpdateManifestMetadataTest {
-  private var db: UpdatesDatabase? = null
-  private var config: UpdatesConfiguration? = null
-  private var manifest: NewManifest? = null
+  private lateinit var db: UpdatesDatabase
+  private lateinit var config: UpdatesConfiguration
+  private lateinit var manifest: NewManifest
 
   @Before
   @Throws(JSONException::class)
@@ -40,7 +40,7 @@ class UpdateManifestMetadataTest {
 
   @After
   fun closeDb() {
-    db!!.close()
+    db.close()
   }
 
   @Test
@@ -49,12 +49,12 @@ class UpdateManifestMetadataTest {
     val response1 = Mockito.mock(ManifestResponse::class.java)
     Mockito.`when`(response1.header("expo-manifest-filters"))
       .thenReturn("branch-name=\"rollout-1\",test=\"value\"")
-    val updateManifest1: UpdateManifest = NewUpdateManifest.fromNewManifest(manifest!!, response1, config!!)
+    val updateManifest1: UpdateManifest = NewUpdateManifest.fromNewManifest(manifest, response1, config)
     ManifestMetadata.saveMetadata(updateManifest1, db, config)
     val response2 = Mockito.mock(ManifestResponse::class.java)
     Mockito.`when`(response2.header("expo-manifest-filters"))
       .thenReturn("branch-name=\"rollout-2\"")
-    val updateManifest2: UpdateManifest = NewUpdateManifest.fromNewManifest(manifest!!, response2, config!!)
+    val updateManifest2: UpdateManifest = NewUpdateManifest.fromNewManifest(manifest, response2, config)
     ManifestMetadata.saveMetadata(updateManifest2, db, config)
     val actual = ManifestMetadata.getManifestFilters(db, config)
     Assert.assertNotNull(actual)
@@ -68,11 +68,11 @@ class UpdateManifestMetadataTest {
     val response1 = Mockito.mock(ManifestResponse::class.java)
     Mockito.`when`(response1.header("expo-manifest-filters"))
       .thenReturn("branch-name=\"rollout-1\"")
-    val updateManifest1: UpdateManifest = NewUpdateManifest.fromNewManifest(manifest!!, response1, config!!)
+    val updateManifest1: UpdateManifest = NewUpdateManifest.fromNewManifest(manifest, response1, config)
     ManifestMetadata.saveMetadata(updateManifest1, db, config)
     val response2 = Mockito.mock(ManifestResponse::class.java)
     Mockito.`when`(response2.header("expo-manifest-filters")).thenReturn("")
-    val updateManifest2: UpdateManifest = NewUpdateManifest.fromNewManifest(manifest!!, response2, config!!)
+    val updateManifest2: UpdateManifest = NewUpdateManifest.fromNewManifest(manifest, response2, config)
     ManifestMetadata.saveMetadata(updateManifest2, db, config)
     val actual = ManifestMetadata.getManifestFilters(db, config)
     Assert.assertNotNull(actual)
@@ -85,11 +85,11 @@ class UpdateManifestMetadataTest {
     val response1 = Mockito.mock(ManifestResponse::class.java)
     Mockito.`when`(response1.header("expo-manifest-filters"))
       .thenReturn("branch-name=\"rollout-1\"")
-    val updateManifest1: UpdateManifest = NewUpdateManifest.fromNewManifest(manifest!!, response1, config!!)
+    val updateManifest1: UpdateManifest = NewUpdateManifest.fromNewManifest(manifest, response1, config)
     ManifestMetadata.saveMetadata(updateManifest1, db, config)
     val response2 = Mockito.mock(ManifestResponse::class.java)
     Mockito.`when`(response2.header("expo-manifest-filters")).thenReturn(null)
-    val updateManifest2: UpdateManifest = NewUpdateManifest.fromNewManifest(manifest!!, response2, config!!)
+    val updateManifest2: UpdateManifest = NewUpdateManifest.fromNewManifest(manifest, response2, config)
     ManifestMetadata.saveMetadata(updateManifest2, db, config)
     val actual = ManifestMetadata.getManifestFilters(db, config)
     Assert.assertNotNull(actual)
